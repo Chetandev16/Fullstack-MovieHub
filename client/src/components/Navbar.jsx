@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useSelector, useDispatch } from "react-redux"
 import { changeTheme } from '../features/theme'
 import lightlogo from '../assets/light.png'
+import { logout } from '../features/user'
 import darklogo from '../assets/dark.png'
 
 const Navbar = () => {
@@ -22,7 +23,13 @@ const Navbar = () => {
     return (
         <div className={`py-9 px-8 flex transition-all duration-200 ease-linear justify-between items-center shadow-lg ${shadow} h-[1.8rem] w-full`} style={changeStyle}>
             <img src={img} alt="" width="80px" />
-            <div>
+            <div className='flex gap-10'>
+                <button onClick={
+                    () => {
+                        dispatch(changeTheme('dark'))
+                        dispatch(logout())
+                    }
+                } className='font-[oswald] tracking-wider hover:text-[#555555] transition-colors ease-linear'>Log Out</button>
                 <div className="flex flex-col justify-center h-screen items-center ">
 
                     <div

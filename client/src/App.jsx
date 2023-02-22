@@ -6,10 +6,13 @@ import { useSelector, useDispatch } from "react-redux"
 import { ToastContainer } from "react-toastify"
 import Content from "./components/Content"
 import Movie from "./components/Movie"
+import Login from "./components/Login"
+import Signup from "./components/Signup"
+import ProtectedMain from "./components/ProtectedMain"
+import ProtectedLogin from "./components/ProtectedLogin"
 
 
 function App() {
-  const dispatch = useDispatch()
   const theme = useSelector(state => state.theme.value)
 
   const setstyle = {
@@ -21,17 +24,29 @@ function App() {
 
 
     <div className="relative h-screen overflow-y-auto transition-colors duration-200 ease-linear" style={setstyle}>
-        <BrowserRouter>
-          <Routes>
-            <Route path='/' element={<Background />} />
-            {/* <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<Signup />} /> */}
-            <Route path="/content" element={<Content />} />
-            <Route path="/allmovies" element={<AllMovies />} />
-            <Route path="/content/movie/:id" element={<Movie/>} />
-          </Routes>
-        </BrowserRouter>
-        <ToastContainer />
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Background />} />
+          <Route path='/login' element={<ProtectedLogin>
+            <Login />
+          </ProtectedLogin>} />
+          <Route path='/signup' element={<ProtectedLogin>
+            <Signup />
+          </ProtectedLogin>} />
+          <Route path="/content" element={
+            <ProtectedMain>
+              <Content />
+            </ProtectedMain>
+          } />
+          <Route path="/allmovies" element={<ProtectedMain>
+            <AllMovies />
+          </ProtectedMain>} />
+          <Route path="/content/movie/:id" element={<ProtectedMain>
+            <Movie />
+          </ProtectedMain>} />
+        </Routes>
+      </BrowserRouter>
+      <ToastContainer />
     </div>
 
   )
