@@ -11,9 +11,11 @@ import Signup from "./components/Signup"
 import ProtectedMain from "./components/ProtectedMain"
 import ProtectedLogin from "./components/ProtectedLogin"
 import { login } from "./features/user"
+import Review from "./components/Review"
 
 function App() {
   const dispatch = useDispatch()
+  // console.log(import.meta.env.VITE_API_URL);
   useEffect(() => {
     if (localStorage.getItem('jwt') !== null) {
       const token = JSON.parse(localStorage.getItem('token'))
@@ -58,6 +60,11 @@ function App() {
           <Route path="/content/movie/:id" element={<ProtectedMain>
             <Movie />
           </ProtectedMain>} />
+
+          <Route path="/content/review/:id" element={<ProtectedMain>
+            <Review />
+          </ProtectedMain>} />
+        
         </Routes>
       </BrowserRouter>
       <ToastContainer />

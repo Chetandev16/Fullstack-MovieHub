@@ -9,6 +9,7 @@ import { setMovies } from '../features/movies';
 
 const AllMovies = () => {
   const [isLoding, setIsLoding] = useState(true)
+  const url = import.meta.env.VITE_API_URL;
 
   const theme = useSelector(state => state.theme.value)
   const dispatch = useDispatch();
@@ -16,7 +17,8 @@ const AllMovies = () => {
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/movies/allmovies',{
+        // const res = await fetch(`https://movie-backend-production-cedb.up.railway.app/api/movies/allmovies`,
+        const res = await fetch(`${url}/api/movies/allmovies`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -35,12 +37,13 @@ const AllMovies = () => {
         return;
       }
     }
-    
+
     getMovies()
     setTimeout(() => {
       setIsLoding(false)
     }, 2000)
   }, [])
+
 
   useEffect(() => {
     setTimeout(()=>{
@@ -54,7 +57,7 @@ const AllMovies = () => {
         progress: undefined,
         theme: theme === 'dark' ? 'dark' : 'light',
       });
-    },2005)
+    },2500)
   },[])
 
   if (isLoding || movies.length === 0) {

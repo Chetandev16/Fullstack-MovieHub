@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_USER')")
-@CrossOrigin(origins = {"http://localhost:5173","http://192.168.1.7:5173"})
+@CrossOrigin(origins = {"http://localhost:5173","http://192.168.1.7:5173","https://moviehubbychetan.netlify.app"})
 @RequestMapping("/api/movies") 
 public class Controller {
     @Autowired

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2'
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const url = import.meta.env.VITE_API_URL;
 
     const handelLogin = async () => {
         if(email === '' || password === ''){
@@ -20,8 +21,8 @@ const Login = () => {
             return;
         }
 
-
-        const validate = await fetch(`http://localhost:8080/auth/validate/${email}`)
+        // const validate = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/validate/${email}`
+        const validate = await fetch(`${url}/auth/validate/${email}`)
 
         const validateData = await validate.text();
         if(validateData === 'user is not present'){
@@ -32,9 +33,8 @@ const Login = () => {
             })
             return;
         }
-
-
-        const res = await fetch('http://localhost:8080/auth/login', {
+        // const res = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/login`,
+        const res = await fetch(`${url}/auth/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -48,6 +48,7 @@ const Login = () => {
 
         if(res.status === 200) {
             localStorage.setItem('jwt', token);
+            localStorage.setItem('email', email);
             dispatch(login({
                 email: email,
                 password: password,

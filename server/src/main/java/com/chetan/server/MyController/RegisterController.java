@@ -23,7 +23,7 @@ import com.chetan.server.Repository.UserInfoRepo;
 import com.chetan.server.dto.AuthRequest;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:5173","http://192.168.1.7:5173"})
+@CrossOrigin(origins = {"http://localhost:5173","http://192.168.1.7:5173","https://moviehubbychetan.netlify.app"})
 @RequestMapping("/auth")
 public class RegisterController {
     @Autowired
@@ -65,6 +65,17 @@ public class RegisterController {
         // System.out.println(value);
         if(value != null){
             return "user is present";
+        }else{
+            return "user is not present";
+        }
+    }
+
+    @GetMapping("/getUsername/{email}")
+    public String getUsername(@PathVariable String email){
+        User value = userInfoRepo.findByEmail(email).orElse(null);
+        // System.out.println(value);
+        if(value != null){
+            return value.getName();
         }else{
             return "user is not present";
         }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams,useNavigate } from 'react-router-dom';
 import { ScaleLoader } from 'react-spinners'
-import { useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const Movie = () => {
+    const navigate = useNavigate();
     const { id } = useParams();
     const user = useSelector(state => state.user.value)
     const [movie, setMovie] = useState({})
@@ -12,6 +13,8 @@ const Movie = () => {
     const [display2, setDisplay2] = useState('block')
     const [embedUrl, setEmbedUrl] = useState('https://www.youtube.com/embed/');
     const filter = display === 'block' ? 'filter blur-sm grayscale' : ''
+    const url = import.meta.env.VITE_API_URL;
+
     useEffect(() => {
         const interval = setInterval(() => {
             if (idx + 1 >= movie.backdrops.length) {
@@ -63,7 +66,8 @@ const Movie = () => {
     useEffect(() => {
         const getMovie = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/movies/imdb/${id}`,{
+                //  const response = await fetch(`https://movie-backend-production-cedb.up.railway.app/api/movies/imdb/${id}`
+                const response = await fetch(`${url}/api/movies/imdb/${id}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -115,7 +119,11 @@ const Movie = () => {
                                 setDisplay('block');
                                 setDisplay2('hidden');
                             }} className='px-4 py-2 bg-blue-600 w-fit rounded-2xl hover:bg-blue-800 transition-all ease-linear delay-100 hover:scale-110' >Watch Trailer</button>
-                            <button className='px-4 py-2 bg-blue-600 w-fit rounded-2xl hover:bg-blue-800 transition-all ease-linear delay-100 hover:scale-110' >Movie Review</button>
+                            <button
+                                onClick={() => {
+                                    navigate(`/content/review/${movie.imdbId}`)
+                                }}
+                                className='px-4 py-2 bg-blue-600 w-fit rounded-2xl hover:bg-blue-800 transition-all ease-linear delay-100 hover:scale-110' >Movie Review</button>
 
                             <div className='flex gap-2 lg:gap-6 justify-center'>
                                 {movie.genres.map((genre, id) => {

@@ -1,4 +1,4 @@
-import React,{useState} from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
 import { Link } from 'react-router-dom'
@@ -13,10 +13,11 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [rePassword, setRePassword] = useState('');
+    const url = import.meta.env.VITE_API_URL;
 
 
     const handelSubmit = async () => {
-        if(name === '' || email === '' || password === '' || rePassword === ''){
+        if (name === '' || email === '' || password === '' || rePassword === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -25,7 +26,7 @@ const SignUp = () => {
             return;
         }
 
-        if(password !== rePassword){
+        if (password !== rePassword) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -34,10 +35,10 @@ const SignUp = () => {
             return;
         }
 
-        const validate = await fetch(`http://localhost:8080/auth/validate/${email}`)
-
+        // const validate = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/validate/${email}`)
+        const validate = await fetch(`${url}/auth/validate/${email}`)
         const validateData = await validate.text();
-        if(validateData === 'user is present'){
+        if (validateData === 'user is present') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -46,7 +47,7 @@ const SignUp = () => {
             return;
         }
 
-        const res = await fetch('http://localhost:8080/auth/register',{
+        const res = await fetch(`${url}/auth/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +60,7 @@ const SignUp = () => {
             }),
         })
 
-        if(res.status === 200){
+        if (res.status === 200) {
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -94,7 +95,7 @@ const SignUp = () => {
 
                         <div className='flex flex-col gap-3'>
                             <h1 className='font-[oswald] text-xl tracking-widest'>Email:</h1>
-                            <input value={email} onChange={(e)=>setEmail(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="text" />
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="text" />
                         </div>
 
                         <div className='flex flex-col gap-3'>
@@ -104,12 +105,12 @@ const SignUp = () => {
 
                         <div className='flex flex-col gap-3'>
                             <h1 className='font-[oswald] text-xl tracking-widest'>Re-Enter Password:</h1>
-                            <input value={rePassword} onChange={(e)=>setRePassword(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="password" />
+                            <input value={rePassword} onChange={(e) => setRePassword(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="password" />
                         </div>
                     </div>
 
                     <div>
-                        <button onClick={()=>{
+                        <button onClick={() => {
                             // console.log('====================================');
                             handelSubmit()
                         }} className='bg-[#555555] hover:bg-[#333333] transition-colors ease-linear py-3 w-[100px] rounded-lg font-[oswald] text-lg tracking-wider' >SignUp</button>
