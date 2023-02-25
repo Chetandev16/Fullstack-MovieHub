@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom';
 import { ScaleLoader } from 'react-spinners'
+import { useSelector} from 'react-redux';
 
 const Movie = () => {
     const { id } = useParams();
+    const user = useSelector(state => state.user.value)
     const [movie, setMovie] = useState({})
     const [idx, setIdx] = useState(0)
     const [display, setDisplay] = useState('hidden')
@@ -61,7 +63,13 @@ const Movie = () => {
     useEffect(() => {
         const getMovie = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/api/movies/imdb/${id}`)
+                const response = await fetch(`http://localhost:8080/api/movies/imdb/${id}`,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                    }
+                })
                 const data = await response.json();
                 setMovie(data);
             } catch (e) {

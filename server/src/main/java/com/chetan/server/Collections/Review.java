@@ -8,7 +8,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Review {
 
 
-    public Review(String body) {
+    public Review(String imdbId,String name,String body) {
+        this.imdbId = imdbId;
+        this.name = name;
         this.body = body;
     }
     
@@ -18,8 +20,17 @@ public class Review {
 
     @Id
     private ObjectId id;
+    private String imdbId;
+    private String name;
     private String body;
 
+    public String getImdbId() {
+        return this.imdbId;
+    }
+
+    public void setImdbId(String imdbId) {
+        this.imdbId = imdbId;
+    }
 
     public ObjectId getId() {
         return this.id;
@@ -27,6 +38,14 @@ public class Review {
 
     public void setId(ObjectId id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getBody() {

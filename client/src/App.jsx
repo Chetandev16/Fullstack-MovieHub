@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import Background from "./components/Background"
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import AllMovies from "./components/AllMovies.jsx"
@@ -10,10 +10,24 @@ import Login from "./components/Login"
 import Signup from "./components/Signup"
 import ProtectedMain from "./components/ProtectedMain"
 import ProtectedLogin from "./components/ProtectedLogin"
-
+import { login } from "./features/user"
 
 function App() {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (localStorage.getItem('jwt') !== null) {
+      const token = JSON.parse(localStorage.getItem('token'))
+      dispatch(login({
+        email: '',
+        password: '',
+        isLogin: true,
+        jwt: token
+      }))
+    }
+  }, [])
+
   const theme = useSelector(state => state.theme.value)
+  const user = useSelector(state => state.user.value)
 
   const setstyle = {
     backgroundColor: theme === 'dark' ? '#444444' : '#fff',

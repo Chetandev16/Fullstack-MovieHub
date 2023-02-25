@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialStateValue = {
     email: '',
     password: '',
+    jwt: '',
     isLogin: false,
 }
 

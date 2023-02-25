@@ -26,6 +26,7 @@ const Navbar = () => {
             <div className='flex gap-10'>
                 <button onClick={
                     () => {
+                        localStorage.removeItem('jwt')
                         dispatch(changeTheme('dark'))
                         dispatch(logout())
                     }

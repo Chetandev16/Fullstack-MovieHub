@@ -13,18 +13,24 @@ const AllMovies = () => {
   const theme = useSelector(state => state.theme.value)
   const dispatch = useDispatch();
   const movies = useSelector(state => state.movies.value)
-
   useEffect(() => {
     const getMovies = async () => {
       try {
-        const res = await fetch('http://localhost:8080/api/movies/allmovies')
+        const res = await fetch('http://localhost:8080/api/movies/allmovies',{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+            // 'Authorization': 'Bearer ' + user.jwt
+          }
+        })
         const data = await res.json()
         dispatch(setMovies(data))
       } catch (error) {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Something went wrong!',
+          text: 'Session Timed Out! Please Login Again',
         })
         return;
       }
@@ -35,6 +41,21 @@ const AllMovies = () => {
       setIsLoding(false)
     }, 2000)
   }, [])
+
+  useEffect(() => {
+    setTimeout(()=>{
+      toast.success('Movies Loaded Successfully!!', {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: false,
+        draggable: true,
+        progress: undefined,
+        theme: theme === 'dark' ? 'dark' : 'light',
+      });
+    },2005)
+  },[])
 
   if (isLoding || movies.length === 0) {
     return (
@@ -52,16 +73,6 @@ const AllMovies = () => {
       </>
     )
   } else {
-    toast.success('Movies Loaded Successfully!!', {
-      position: "bottom-center",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: false,
-      draggable: true,
-      progress: undefined,
-      theme: theme === 'dark' ? 'dark' : 'light',
-    });
     return (
       <div className='flex flex-col mt-10 gap-4 justify-center items-center'>
         <h2 className='text-center tracking-[0.5rem] text-3xl'>Moives Listed</h2>

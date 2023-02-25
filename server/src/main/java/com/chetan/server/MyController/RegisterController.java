@@ -1,5 +1,4 @@
 package com.chetan.server.MyController;
-
 // import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +7,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 // import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,7 @@ import com.chetan.server.Collections.User;
 import com.chetan.server.MovieServices.RegisterUserService;
 // import com.chetan.server.Repository.UserInfoRepo;
 import com.chetan.server.MovieServices.jwtService;
+import com.chetan.server.Repository.UserInfoRepo;
 import com.chetan.server.dto.AuthRequest;
 
 @RestController
@@ -34,8 +36,8 @@ public class RegisterController {
     // @Autowired
     // private PasswordEncoder passwordEncoder;
 
-    // @Autowired
-    // private UserInfoRepo userInfoRepo;
+    @Autowired
+    private UserInfoRepo userInfoRepo;
     
     @PostMapping("/register")
     public void register(@RequestBody User user){
@@ -57,8 +59,14 @@ public class RegisterController {
             throw new UsernameNotFoundException("User not found (or bad password)");
         }
     }
-    // @GetMapping("/login")
-    // public Optional<User> login(@RequestBody User user){
-    //     return userInfoRepo.findByEmail(user.getEmail());
-    // }
+    @GetMapping("/validate/{email}")
+    public String login(@PathVariable String email){
+        User value = userInfoRepo.findByEmail(email).orElse(null);
+        // System.out.println(value);
+        if(value != null){
+            return "user is present";
+        }else{
+            return "user is not present";
+        }
+    }
 }

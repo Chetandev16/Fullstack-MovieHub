@@ -1,11 +1,9 @@
 package com.chetan.server.MyController;
 
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,13 +14,12 @@ import com.chetan.server.MovieServices.ReviewService;
 
 @RestController
 @RequestMapping("/api/movies/reviews")
-@CrossOrigin(origins = {"http://localhost:5173","http://192.168.1.7:5173"})
 public class ReviewController {
     @Autowired
     private ReviewService reviewService;
     
     @PostMapping
-    public ResponseEntity<Review> createReview(@RequestBody Map<String,String> payload) {
-        return new ResponseEntity<Review>(reviewService.createReview(payload.get("imdbId"),payload.get("reviewBody")), HttpStatus.OK);
+    public ResponseEntity<Review> createReview(@RequestBody Review review) {
+        return new ResponseEntity<Review>(reviewService.createReview(review.getImdbId(),review.getName(),review.getBody()), HttpStatus.OK);
     }
 }

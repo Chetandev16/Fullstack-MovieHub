@@ -1,10 +1,68 @@
-import React from 'react'
-import { useDispatch} from 'react-redux'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { login } from '../features/user'
 import { Link } from 'react-router-dom'
 import wave from '../assets/waving-hand.png'
+import Swal from 'sweetalert2'
+
 
 const Login = () => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const handelLogin = async () => {
+        if(email === '' || password === ''){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Please fill all the fields!',
+            })
+            return;
+        }
+
+
+        const validate = await fetch(`http://localhost:8080/auth/validate/${email}`)
+
+        const validateData = await validate.text();
+        if(validateData === 'user is not present'){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Email not exists! Please signup first!',
+            })
+            return;
+        }
+
+
+        const res = await fetch('http://localhost:8080/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        })
+        const token = await res.text();
+
+        if(res.status === 200) {
+            localStorage.setItem('jwt', token);
+            dispatch(login({
+                email: email,
+                password: password,
+                isLogin: true,
+                jwt: token
+            }))
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Invaild credentials!',
+            })
+        }
+
+    }
     const dispatch = useDispatch();
     return (
         <div className='flex justify-center items-center h-screen'>
@@ -22,21 +80,25 @@ const Login = () => {
                     <div className='flex flex-col gap-8'>
                         <div className='flex flex-col gap-3'>
                             <h1 className='font-[oswald] text-xl tracking-widest'>Email:</h1>
-                            <input className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="text" />
+                            <input value={email} onChange={(e) => setEmail(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="text" />
                         </div>
 
                         <div className='flex flex-col gap-3'>
                             <h1 className='font-[oswald] text-xl tracking-widest'>Password:</h1>
-                            <input className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="password" />
+                            <input value={password} onChange={(e) => setPassword(e.target.value)} className='px-2 w-full lg:w-[340px] h-[40px] rounded-lg bg-[#333333] text-white' type="password" />
                         </div>
                     </div>
 
                     <button className='bg-[#555555] hover:bg-[#333333] transition-colors ease-linear w-[100px] py-3 rounded-lg font-[oswald] text-lg tracking-wider' onClick={
-                        () => dispatch(login({
-                            email: '',
-                            password: '',
-                            isLogin: true
-                        }))
+                        () => {
+                            handelLogin();
+                            // dispatch(login({
+                            //     email: email,
+                            //     password: password,
+                            //     isLogin: true,
+                            //     jwt: 'asfasfs'
+                            // }))
+                        }
                     } >LogIn</button>
 
                 </div>

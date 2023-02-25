@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 
 const ProtectedMain = (props) => {
   const user = useSelector(state => state.user.value);
-  if (user.isLogin) {
+  if (user.isLogin === true) {
     return props.children;
   } else {
     return (
