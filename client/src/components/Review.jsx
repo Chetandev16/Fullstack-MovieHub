@@ -102,7 +102,6 @@ const Review = () => {
 
     const getMovie = async () => {
         try {
-            //  const response = await fetch(`https://movie-backend-production-cedb.up.railway.app/api/movies/imdb/${id}`
             const response = await fetch(`${url}/api/movies/imdb/${id}`, {
                 method: 'GET',
                 headers: {
