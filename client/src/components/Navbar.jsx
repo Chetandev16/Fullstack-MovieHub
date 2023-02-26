@@ -27,6 +27,7 @@ const Navbar = () => {
                 <button onClick={
                     () => {
                         localStorage.removeItem('jwt')
+                        localStorage.removeItem('email')
                         dispatch(changeTheme('dark'))
                         dispatch(logout())
                     }

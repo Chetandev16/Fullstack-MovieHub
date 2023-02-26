@@ -34,8 +34,6 @@ const SignUp = () => {
             })
             return;
         }
-
-        // const validate = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/validate/${email}`)
         const validate = await fetch(`${url}/auth/validate/${email}`)
         const validateData = await validate.text();
         if (validateData === 'user is present') {

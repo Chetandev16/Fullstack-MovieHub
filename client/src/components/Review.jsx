@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { ScaleLoader } from 'react-spinners'
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const Review = () => {
     const navigate = useNavigate();
@@ -9,18 +10,20 @@ const Review = () => {
     const [review, setReview] = useState('')
     const [movie, setMovie] = useState({})
     const [idx, setIdx] = useState(0)
+    const theme = useSelector(state => state.theme.value)
     const [name,setName] = useState('')
     const email = localStorage.getItem('email');
     const [rerender, setRerender] = useState(0);
+    const url = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         getMovie();
     }, [rerender])
-    // console.log(movie);
+  
 
     useEffect(() => {
         const fetchName = async () => {
-            const res = await fetch(`http://localhost:8080/auth/getUsername/${email}`);
+            const res = await fetch(`${url}/auth/getUsername/${email}`);
             const data = await res.text();
             if(data !== "user is not present"){
                 setName(data);
@@ -30,7 +33,6 @@ const Review = () => {
         fetchName();
     },[])
 
-    const url = import.meta.env.VITE_API_URL;
 
     const handleCreateReview = async () => {
         const displayName = name.split(' ')[0];
@@ -48,6 +50,16 @@ const Review = () => {
         });
 
         if(response.status === 200) {
+            toast.success('Review Added!!', {
+                position: "bottom-center",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: theme === 'dark' ? 'dark' : 'light',
+              });
             navigate(`/content/review/${movie.imdbId}`);
             setRerender(rerender + 1);
         }else{

@@ -21,7 +21,6 @@ const Login = () => {
             return;
         }
 
-        // const validate = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/validate/${email}`
         const validate = await fetch(`${url}/auth/validate/${email}`)
 
         const validateData = await validate.text();
@@ -33,7 +32,6 @@ const Login = () => {
             })
             return;
         }
-        // const res = await fetch(`https://movie-backend-production-cedb.up.railway.app/auth/login`,
         const res = await fetch(`${url}/auth/login`, {
             method: 'POST',
             headers: {
@@ -93,12 +91,6 @@ const Login = () => {
                     <button className='bg-[#555555] hover:bg-[#333333] transition-colors ease-linear w-[100px] py-3 rounded-lg font-[oswald] text-lg tracking-wider' onClick={
                         () => {
                             handelLogin();
-                            // dispatch(login({
-                            //     email: email,
-                            //     password: password,
-                            //     isLogin: true,
-                            //     jwt: 'asfasfs'
-                            // }))
                         }
                     } >LogIn</button>
 

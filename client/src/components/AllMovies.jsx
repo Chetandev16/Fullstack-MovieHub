@@ -17,13 +17,11 @@ const AllMovies = () => {
   useEffect(() => {
     const getMovies = async () => {
       try {
-        // const res = await fetch(`https://movie-backend-production-cedb.up.railway.app/api/movies/allmovies`,
         const res = await fetch(`${url}/api/movies/allmovies`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('jwt')
-            // 'Authorization': 'Bearer ' + user.jwt
           }
         })
         const data = await res.json()
@@ -34,6 +32,9 @@ const AllMovies = () => {
           title: 'Oops...',
           text: 'Session Timed Out! Please Login Again',
         })
+        localStorage.removeItem('jwt')
+        localStorage.removeItem('email')
+        window.location.href = '/'
         return;
       }
     }
