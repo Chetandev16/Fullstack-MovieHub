@@ -8,10 +8,11 @@ const Review = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     const [review, setReview] = useState('')
+    const [reviews, setReviews] = useState([])
     const [movie, setMovie] = useState({})
     const [idx, setIdx] = useState(0)
     const theme = useSelector(state => state.theme.value)
-    const [name,setName] = useState('')
+    const [name, setName] = useState('')
     const email = localStorage.getItem('email');
     const [rerender, setRerender] = useState(0);
     const url = import.meta.env.VITE_API_URL;
@@ -19,19 +20,19 @@ const Review = () => {
     useEffect(() => {
         getMovie();
     }, [rerender])
-  
+
 
     useEffect(() => {
         const fetchName = async () => {
             const res = await fetch(`${url}/auth/getUsername/${email}`);
-            const data = await res.text();
-            if(data !== "user is not present"){
+            const data = await res.json();
+            if (data !== "user is not present") {
                 setName(data);
             }
         }
 
         fetchName();
-    },[])
+    }, [])
 
 
     const handleCreateReview = async () => {
@@ -49,7 +50,7 @@ const Review = () => {
             }),
         });
 
-        if(response.status === 200) {
+        if (response.status === 200) {
             toast.success('Review Added!!', {
                 position: "bottom-center",
                 autoClose: 2000,
@@ -59,11 +60,11 @@ const Review = () => {
                 draggable: true,
                 progress: undefined,
                 theme: theme === 'dark' ? 'dark' : 'light',
-              });
+            });
             navigate(`/content/review/${movie.imdbId}`);
             setRerender(rerender + 1);
-        }else{
-            console.log('error');
+        } else {
+            // console.log('error');
         }
     }
 
@@ -96,6 +97,20 @@ const Review = () => {
             }
         };
 
+        const getReviews = async () => {
+            const res = await fetch(`${url}/api/movies/reviews/${movie.imdbId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+                }
+            });
+            const data = await res.json();
+            setReviews(data);
+        }
+
+
+        getReviews();
         preloadImages();
 
     }, [movie]);
@@ -110,6 +125,7 @@ const Review = () => {
                 }
             })
             const data = await response.json();
+            // console.log(data);
             setMovie(data);
         } catch (e) {
             console.log(e);
@@ -162,9 +178,9 @@ const Review = () => {
                             </div>
 
                             <div className='w-[340px] lg:w-[550px] h-[150px] lg:h-[300px] flex flex-col gap-2 overflow-y-scroll scrollbar-hide'>
-                                {movie.reviewIds.slice(0).reverse().map((review) => {
+                                {reviews.slice(0).reverse().map((review,idx) => {
                                     return (
-                                        <div className='flex border border-black p-5 bg-[#222222]'>
+                                        <div key={idx} className='flex border border-black p-5 bg-[#222222]'>
                                             <h1 className="font-[oswald] ">{review.name} :</h1>
                                             <p className="font-[oswald] tracking-widest">{review.body}</p>
                                         </div>

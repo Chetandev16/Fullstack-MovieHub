@@ -12,23 +12,11 @@ const Login = () => {
     const url = import.meta.env.VITE_API_URL;
 
     const handelLogin = async () => {
-        if(email === '' || password === ''){
+        if (email === '' || password === '') {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
                 text: 'Please fill all the fields!',
-            })
-            return;
-        }
-
-        const validate = await fetch(`${url}/auth/validate/${email}`)
-
-        const validateData = await validate.text();
-        if(validateData === 'user is not present'){
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Email not exists! Please signup first!',
             })
             return;
         }
@@ -42,9 +30,19 @@ const Login = () => {
                 password: password
             })
         })
-        const token = await res.text();
 
-        if(res.status === 200) {
+        const token = await res.json();
+        // console.log(token);
+        if (token == 'User does not exists') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'User does not exists!',
+            })
+        }
+
+
+        if (res.status === 200) {
             localStorage.setItem('jwt', token);
             localStorage.setItem('email', email);
             dispatch(login({
@@ -53,7 +51,7 @@ const Login = () => {
                 isLogin: true,
                 jwt: token
             }))
-        }else{
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',

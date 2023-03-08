@@ -28,7 +28,7 @@ const Movie = () => {
 
     useEffect(() => {
         const preloadImages = async () => {
-            const promises = movie.backdrops.map((image) => {
+            const promises = movie?.backdrops?.map((image) => {
                 return new Promise((resolve, reject) => {
                     const img = new Image();
                     img.onload = resolve;
@@ -48,7 +48,7 @@ const Movie = () => {
         const convertToEmbedLink = async (url) => {
             var videoId = '';
             var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-            var match = url.match(regExp);
+            var match = await url.match(regExp);
             if (match && match[7].length == 11) {
                 videoId = match[7];
             }
@@ -104,15 +104,15 @@ const Movie = () => {
             <div className='relative'>
                 <div className={`${filter} relative`}>
                     <div className="blur-sm bg-no-repeat bg-cover h-screen overflow-auto flex justify-center items-center" style={{
-                        backgroundImage: `url(${movie.backdrops[idx]})`,
+                        backgroundImage: `url(${movie?.backdrops[idx]})`,
                     }}>
                     </div >
 
 
                     <div className=' absolute h-[700px]  top-[16%] left-[16%] lg:top-[30%] lg:left-[14%] w-[70%] lg:h-[50%] flex flex-col lg:flex-row justify-between items-center'>
-                        <img src={movie.poster} className="rounded-xl shadow-xl shadow-black cursor-pointer transition-transform ease-linear hover:scale-105 h-[400px] w-[300px] object-cover" alt="" />
+                        <img src={movie?.poster} className="rounded-xl shadow-xl shadow-black cursor-pointer transition-transform ease-linear hover:scale-105 h-[400px] w-[300px] object-cover" alt="" />
                         <div className='flex flex-col lg:justify-between justify-evenly items-center h-full'>
-                            <h1 className="text-2xl lg:text-5xl underline font-[oswald] font-bold">{movie.title}</h1>
+                            <h1 className="text-2xl lg:text-5xl underline font-[oswald] font-bold">{movie?.title}</h1>
 
                             <button onClick={() => {
                                 setDisplay('block');
@@ -120,12 +120,12 @@ const Movie = () => {
                             }} className='px-4 py-2 bg-blue-600 w-fit rounded-2xl hover:bg-blue-800 transition-all ease-linear delay-100 hover:scale-110' >Watch Trailer</button>
                             <button
                                 onClick={() => {
-                                    navigate(`/content/review/${movie.imdbId}`)
+                                    navigate(`/content/review/${movie?.imdbId}`)
                                 }}
                                 className='px-4 py-2 bg-blue-600 w-fit rounded-2xl hover:bg-blue-800 transition-all ease-linear delay-100 hover:scale-110' >Movie Review</button>
 
                             <div className='flex gap-2 lg:gap-6 justify-center'>
-                                {movie.genres.map((genre, id) => {
+                                {movie?.genres?.map((genre, id) => {
                                     return (
                                         <span key={id} className="text-md font-light font-[oswald] bg-gray-400 px-2 py-1 rounded-3xl justify-evenly">{genre}</span>
                                     )

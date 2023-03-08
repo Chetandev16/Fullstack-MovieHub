@@ -24,18 +24,21 @@ const AllMovies = () => {
             'Authorization': 'Bearer ' + localStorage.getItem('jwt')
           }
         })
+
+        if (res.status === 401) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Session Timed Out! Please Login Again',
+          })
+          localStorage.removeItem('jwt')
+          localStorage.removeItem('email')
+          window.location.href = '/'
+          return;
+        }
         const data = await res.json()
         dispatch(setMovies(data))
       } catch (error) {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Session Timed Out! Please Login Again',
-        })
-        localStorage.removeItem('jwt')
-        localStorage.removeItem('email')
-        window.location.href = '/'
-        return;
       }
     }
 
@@ -47,7 +50,7 @@ const AllMovies = () => {
 
 
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       toast.success('Movies Loaded Successfully!!', {
         position: "bottom-center",
         autoClose: 2000,
@@ -58,8 +61,8 @@ const AllMovies = () => {
         progress: undefined,
         theme: theme === 'dark' ? 'dark' : 'light',
       });
-    },2500)
-  },[])
+    }, 2500)
+  }, [])
 
   if (isLoding || movies.length === 0) {
     return (
